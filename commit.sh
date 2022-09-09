@@ -1,4 +1,5 @@
 #!/bin/sh
-git add .
-git commit -m "$1"
-git push -u origin main   
+
+ehco "`git add .`"
+echo "`git commit -m "$*"`"
+echo "`git push -u origin main`"   
