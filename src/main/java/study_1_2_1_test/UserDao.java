@@ -1,5 +1,7 @@
 package study_1_2_1_test;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,10 +15,10 @@ public class UserDao {
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-    public void add(User user) throws ClassNotFoundException, SQLException {
+    public void add(User user) throws SQLException {
         Connection c = dataSource.getConnection();
 
-        System.out.println("connect");
+//        System.out.println("connect");
     	PreparedStatement ps = c.prepareStatement(
             "insert into users(id, name, password) values(?,?,?)");
         
@@ -30,7 +32,7 @@ public class UserDao {
         c.close();
     }
 
-    public User get(String id) throws ClassNotFoundException, SQLException {
+    public User get(String id) throws SQLException {
         Connection c = dataSource.getConnection();
         PreparedStatement ps = c.prepareStatement(
             "select * from users where id = ?");
@@ -38,21 +40,24 @@ public class UserDao {
     	ps.setString(1, id);
 
         ResultSet rs = ps.executeQuery();
-        rs.next();
-        User user = new User();
-		user.setid(rs.getString("id"));
-		user.setname(rs.getString("name"));
-		user.setpassword(rs.getString("password"));
+
+        User user = null;
+        if (rs.next()) {
+            user = new User();
+            user.setid((rs.getString("id")));
+            user.setname((rs.getString("name")));
+            user.setpassword((rs.getString("password")));
+        }
 
 		rs.close();
         ps.close();
         c.close();
-		System.out.println("get user inform complete!");
-
+//		System.out.println("get user inform complete!");
+        if (user == null) throw new EmptyResultDataAccessException(1);
         return user;
     }
 
-    public void reset() throws ClassNotFoundException, SQLException{
+    public void reset() throws SQLException{
         Connection c = dataSource.getConnection();
         PreparedStatement ps = c.prepareStatement(
                 "TRUNCATE users");
@@ -60,6 +65,20 @@ public class UserDao {
         ps.execute();
         ps.close();
         c.close();
+    }
+    public int getCount() throws SQLException{
+        Connection c = dataSource.getConnection();
+        PreparedStatement ps = c.prepareStatement(
+                "select count(*) from users");
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        int count = rs.getInt(1);
+
+        rs.close();
+        ps.close();
+        c.close();
+
+        return count;
     }
 
 }
