@@ -14,8 +14,3 @@ public class DConnectionMaker implements ConnectionMaker {
     }
 }
 
-    git config --global user.name leenuu
-        git config --global user.email kangjoon10@gmail.com
-git branch -M main
-        git remote add origin https://github.com/leenuu/spring_study.git
-
