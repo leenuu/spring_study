@@ -1,18 +1,27 @@
-package study_1_2_1_test;
+package study_1_2_2_test_use_spring;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericGroovyApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.sql.SQLException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericGroovyApplicationContext;
-import org.springframework.dao.EmptyResultDataAccessException;
-
-import java.sql.SQLException;
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "/applicationContext.xml")
 public class UserDaoTest {
 
+    @Autowired
+    private ApplicationContext context;
+    @Autowired
     private UserDao dao;
     private User user1;
     private User user2;
@@ -20,8 +29,10 @@ public class UserDaoTest {
 
     @Before
     public void setUp() {
-        ApplicationContext context = new GenericGroovyApplicationContext("applicationContext.xml");
-        this.dao = context.getBean("userDao",UserDao.class);
+        System.out.println(this.context);
+        System.out.println(this);
+
+        // this.dao = this.context.getBean("userDao", UserDao.class);
 
         this.user1 = new User("leenuu", "kang", "404");
         this.user2 = new User("donas", "kim", "not");
@@ -29,8 +40,6 @@ public class UserDaoTest {
     }
     @Test
     public void addAndget() throws SQLException {
-
-
 
         dao.reset();
         assertThat(dao.getCount(), is(0));
