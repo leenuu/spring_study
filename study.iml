@@ -6,6 +6,8 @@
         <fileset id="fileset" name="ApplicationContext" removed="false">
           <file>file://$MODULE_DIR$/src/main/java/test_3_UserDao_XML/applicationContext.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/applicationContext.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/applicationContext_test_db.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/junitcontext.xml</file>
         </fileset>
       </configuration>
     </facet>
