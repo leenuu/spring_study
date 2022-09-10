@@ -1,4 +1,4 @@
-package study_1_2_2_test_use_spring;
+package study_1_2_3_test_use_spring;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,8 +19,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/applicationContext.xml")
-@DirtiesContext
+@ContextConfiguration(locations = "/applicationContext_test_db.xml")
 public class UserDaoTest {
 
     @Autowired
@@ -33,12 +32,9 @@ public class UserDaoTest {
 
     @Before
     public void setUp() {
-        System.out.println(this.context);
-        System.out.println(this);
+//        System.out.println(this.context);
+//        System.out.println(this);
 
-        DataSource dataSource = new SingleConnectionDataSource(
-                "jdbc:mysql://15.164.225.156/testdb", "root", "Kangjoon12!",true);
-        dao.setDataSource(dataSource);
         // this.dao = this.context.getBean("userDao", UserDao.class);
 
         this.user1 = new User("leenuu", "kang", "404");
