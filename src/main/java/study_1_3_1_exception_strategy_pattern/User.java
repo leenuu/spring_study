@@ -1,4 +1,4 @@
-package study_1_3_1_exception;
+package study_1_3_1_exception_strategy_pattern;
 
 public class User {
     String id;

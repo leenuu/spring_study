@@ -1,4 +1,4 @@
-package study_1_3_1_exception;
+package study_1_3_1_exception_strategy_pattern;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 
@@ -14,22 +14,9 @@ public class UserDao {
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-
     public void add(User user) throws SQLException {
-        Connection c = dataSource.getConnection();
-
-//        System.out.println("connect");
-    	PreparedStatement ps = c.prepareStatement(
-            "insert into users(id, name, password) values(?,?,?)");
-        
-        ps.setString(1, user.getid());
-        ps.setString(2, user.getname());
-        ps.setString(3, user.getpassword());
-
-        ps.executeUpdate();
-
-        ps.close();
-        c.close();
+        StatementStrategy st = new AddStatement(user);
+        jdbcContextWithStatementStrategy(st);
     }
 
     public User get(String id) throws SQLException {
@@ -56,33 +43,6 @@ public class UserDao {
         if (user == null) throw new EmptyResultDataAccessException(1);
         return user;
     }
-
-    public void reset() throws SQLException {
-        Connection c = null;
-        PreparedStatement ps = null;
-
-        try {
-            c = dataSource.getConnection();
-            ps = c.prepareStatement("TRUNCATE users");
-            ps.execute();
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                }
-            }
-
-            if (c != null) {
-                try {
-                    c.close();
-                } catch (SQLException e) {
-                }
-            }
-        }
-    }
     public int getCount() throws SQLException{
         Connection c = dataSource.getConnection();
         PreparedStatement ps = c.prepareStatement(
@@ -97,5 +57,29 @@ public class UserDao {
 
         return count;
     }
+    public void reset() throws SQLException {
+        StatementStrategy st = new DeleteAllStatement();
+        jdbcContextWithStatementStrategy(st);
+    }
 
+    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        try {
+            c = dataSource.getConnection();
+            ps = stmt.makePreparedStatement(c);
+            ps.execute();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (ps != null) { try { ps.close();} catch (SQLException e) {}}
+            if (c != null) { try { c.close();} catch (SQLException e) {}}
+        }
+    }
+    private PreparedStatement makeStatement(Connection c) throws SQLException {
+        PreparedStatement ps;
+        ps = c.prepareStatement("TRUNCATE users");
+        return ps;
+    }
 }
