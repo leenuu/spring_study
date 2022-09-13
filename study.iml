@@ -9,6 +9,7 @@
           <file>file://$MODULE_DIR$/src/main/resources/applicationContext_test_db.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/junitcontext.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/testcontext.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/1_3_applicationContext.xml</file>
         </fileset>
       </configuration>
     </facet>
