@@ -3,13 +3,19 @@ package test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+
 public class test {
-    public static void main(String[] args) {
+    @Test
+    public void test() {
         ApplicationContext context = new AnnotationConfigApplicationContext(testBean.class);
 
         int num = context.getBean("test", int.class);
 
-        System.out.println(num);
-
+        assertThat(num, is(1));
     }
 }
