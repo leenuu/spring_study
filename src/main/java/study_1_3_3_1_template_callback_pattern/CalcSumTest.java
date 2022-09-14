@@ -1,5 +1,6 @@
 package study_1_3_3_1_template_callback_pattern;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -9,9 +10,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class CalcSumTest {
+    Calculator calculator;
+    String numFilePath;
+
+    @Before
+    public void setUp() {
+        this.calculator = new Calculator();
+        this.numFilePath = new File("./numbers.txt").getPath();
+    }
     @Test
     public void sumOfNumbers() throws IOException {
-        Calculator calculator = new Calculator();
 //        File dir = new File("./").getPath();
 //        File files[] = dir.listFiles();
 //
@@ -20,7 +28,6 @@ public class CalcSumTest {
 //        }
 //        System.out.println(new File("./numbers.txt").getPath());
 //        int sum = calculator.clacSum();
-        int sum = calculator.clacSum(new File("./numbers.txt").getPath());
-        assertThat(sum, is(10));
+        assertThat(calculator.clacSum(this.numFilePath), is(10));
     }
 }
