@@ -10,12 +10,14 @@ import static org.junit.Assert.assertThat;
 
 
 public class test {
-    @Test
-    public void test() {
-        ApplicationContext context = new AnnotationConfigApplicationContext(testBean.class);
-
-        int num = context.getBean("test", int.class);
-
-        assertThat(num, is(1));
+    public static void main(String[] args) {
+        new test().test_1("gjgjgjgj");
+    }
+    public void test_1(String q,String... s) {
+//        System.out.println(s[0]);
+        System.out.println(q);
+        System.out.println(s.length);
+//        for(String a:s)
+//            System.out.println(a);
     }
 }

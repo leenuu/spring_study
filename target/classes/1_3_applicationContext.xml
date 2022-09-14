@@ -10,12 +10,12 @@
         <property name="password" value="Kangjoon12!" />
     </bean>
 
-    <bean id="jdbcContext" class="study_1_3_2.JdbcContext">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
+<!--    <bean id="jdbcContext" class="study_1_3_2_strategy_pattern.JdbcContext">-->
+<!--        <property name="dataSource" ref="dataSource" />-->
+<!--    </bean>-->
 
-    <bean id="userDao" class="study_1_3_2.UserDao">
+    <bean id="userDao" class="study_1_3_2_strategy_pattern.UserDao">
         <property name="dataSource" ref="dataSource" />
-        <property name="jdbcContext" ref="jdbcContext" />
+<!--        <property name="jdbcContext" ref="jdbcContext" />-->
     </bean>
 </beans>
