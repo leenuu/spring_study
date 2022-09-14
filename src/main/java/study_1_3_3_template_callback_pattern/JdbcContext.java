@@ -33,7 +33,7 @@ public class JdbcContext {
         this.workWithStatementStrategy(new StatementStrategy() {
             public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
                 PreparedStatement ps = c.prepareStatement(query);
-                for(int i = 0; i <= property.length; i++) {
+                for(int i = 0; i < property.length; i++) {
                     ps.setString(i+1, property[i]);
                 }
                 return ps;

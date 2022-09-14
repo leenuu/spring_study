@@ -15,7 +15,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/applicationContext_test_db.xml")
+@ContextConfiguration(locations = "/1_3_applicationContext.xml")
 public class UserDaoTest {
 
     @Autowired
