@@ -1,4 +1,4 @@
-package study_1_3_3_1_template_callback_pattern;
+package study_1_3_3_2_template_callback_pattern_with_generics;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,5 +33,9 @@ public class CalcSumTest {
     @Test
     public void multiplyOfNumbers() throws IOException {
         assertThat(calculator.calcMultiply(this.numFilePath), is(24));
+    }
+    @Test
+    public void concatenateString() throws IOException {
+        assertThat(calculator.concatenate(this.numFilePath), is("1234"));
     }
 }
