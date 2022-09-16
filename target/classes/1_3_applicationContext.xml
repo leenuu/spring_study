@@ -14,7 +14,7 @@
 <!--        <property name="dataSource" ref="dataSource" />-->
 <!--    </bean>-->
 
-    <bean id="userDao" class="study_1_3_3_template_callback_pattern.UserDao">
+    <bean id="userDao" class="study_1_3_4_jdbc_template.UserDao">
         <property name="dataSource" ref="dataSource" />
 <!--        <property name="jdbcContext" ref="jdbcContext" />-->
     </bean>
