@@ -2,7 +2,23 @@
 <module version="4">
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
-      <configuration />
+      <configuration>
+        <fileset id="fileset" name="1_3_applicationContext" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/1_3_applicationContext.xml</file>
+        </fileset>
+        <fileset id="fileset2" name="ApplicationContext" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/applicationContext.xml</file>
+        </fileset>
+        <fileset id="fileset3" name="ApplicationContext_test_db" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/applicationContext_test_db.xml</file>
+        </fileset>
+        <fileset id="fileset4" name="Junitcontext" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/junitcontext.xml</file>
+        </fileset>
+        <fileset id="fileset5" name="Testcontext" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/testcontext.xml</file>
+        </fileset>
+      </configuration>
     </facet>
   </component>
 </module>
