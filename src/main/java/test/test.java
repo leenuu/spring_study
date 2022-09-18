@@ -12,6 +12,7 @@ import static org.junit.Assert.assertThat;
 public class test {
     public static void main(String[] args) {
         new test().test_1("gjgjgjgj");
+        new test().test_1("54545454");
     }
     public void test_1(String q,String... s) {
 //        System.out.println(s[0]);
