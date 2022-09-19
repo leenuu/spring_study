@@ -16,9 +16,9 @@ public class UserDaoJdbc implements UserDao {
     private RowMapper<User> userMappper = new RowMapper<User>() {
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             User user = new User();
-            user.setid(resultSet.getString("id"));
-            user.setname(resultSet.getString("name"));
-            user.setpassword(resultSet.getString("password"));
+            user.setId(resultSet.getString("id"));
+            user.setName(resultSet.getString("name"));
+            user.setPassword(resultSet.getString("password"));
             user.setLevel(Level.valueOf(resultSet.getInt("Level")));
             user.setLogin(resultSet.getInt("Login"));
             user.setRecommend(resultSet.getInt("Recommend"));
@@ -27,20 +27,11 @@ public class UserDaoJdbc implements UserDao {
         }
     };
     public void add(User user) {
-            this.jdbcTemplate.update("insert into users(id, name, password, Level, Login, Recommend) values(?,?,?,?,?,?)", user.getid(), user.getname(), user.getpassword(), user.getLevel(), user.getLogin(), user.getRecommand());
+        this.jdbcTemplate.update("insert into users(id, name, password, Level, Login, Recommend) values(?,?,?,?,?,?)", user.getId(), user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommand());
     }
-//    public void add(final User user) throws DuplicateUserIdException {
-//        try {
-//                if code can occur SQLException
-//        }
-//        catch (SQLException e) {
-//            if(e.getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY)
-//                throw new DuplicateUserIdException(e);
-//            else
-//                throw new RuntimeException(e);
-//        }
-//    }
-
+    public void update(User user) {
+        this.jdbcTemplate.update("update users set name = ?, password = ?, Level = ?, Login = ?, Recommend = ? where id = ?", user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommand(), user.getId());
+    }
     public User get(String id) {
         return this.jdbcTemplate.queryForObject("select * from users where id = ?", new Object[] {id}, this.userMappper);
     }

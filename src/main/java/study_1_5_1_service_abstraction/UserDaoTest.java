@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,67 +36,56 @@ public class UserDaoTest {
 
     @Before
     public void setUp() {
-//        System.out.println(this.context);
-//        System.out.println(this);
-
-        // this.dao = this.context.getBean("userDao", UserDao.class);
-
         this.user1 = new User("leenuu", "kang", "404", Level.BASIC, 1, 0);
         this.user2 = new User("donas", "kim", "not", Level.SILVER, 55, 10);
         this.user3 = new User("pgn", "hong", "found", Level.GOLD, 40, 40);
     }
+    @Test
+    public void update() {
+        dao.reset();
+
+        dao.add(user1);
+        dao.add(user2);
+
+        user1.setName("eunjin");
+        user1.setPassword("ksj");
+        user1.setLevel(Level.GOLD);
+        user1.setLogin(1000);
+        user1.setRecommend(999);
+
+        dao.update(user1);
+
+        User user1updtate = dao.get(user1.getId());
+        checkSameUser(user1, user1updtate);
+        User user2same = dao.get(user2.getId());
+        checkSameUser(user2, user2same);
+    }
 //    @Test
-    public void resetData() throws SQLException {
+    public void resetData() {
         this.dao.reset();
     }
-    @Test
-    public void setData() throws SQLException {
+//    @Test
+    public void setData() {
         this.dao.add(user1);
         this.dao.add(user2);
         this.dao.add(user3);
     }
 //    @Test
-    public void addAndget() throws SQLException {
+    public void addAndget() {
 
         dao.reset();
-        assertThat(dao.getCount(), is(0));
-//        System.out.println("test reset table complete");
         dao.add(user1);
-//        System.out.println("test add complete");
 		dao.add(user2);
         dao.add(user3);
-        assertThat(dao.getCount(), is(3));
 
-        User userget1 = dao.get(user1.getid());
-        User userget2 = dao.get(user2.getid());
-        User userget3 = dao.get(user3.getid());
+        User userget1 = dao.get(user1.getId());
+        User userget2 = dao.get(user2.getId());
+        User userget3 = dao.get(user3.getId());
 
-        assertThat(userget1.getname(), is(user1.getname()));
-        assertThat(userget1.getpassword(), is(user1.getpassword()));
+        checkSameUser(user1, userget1);
+        checkSameUser(user2, userget2);
+        checkSameUser(user3, userget3);
 
-        assertThat(userget2.getname(), is(user2.getname()));
-        assertThat(userget2.getpassword(), is(user2.getpassword()));
-
-
-        assertThat(userget3.getname(), is(user3.getname()));
-        assertThat(userget3.getpassword(), is(user3.getpassword()));
-
-//        assertThat(user2.getname(), is(user2.getname()));
-//        assertThat(user2.getpassword(), is(user2.getpassword()));
-//        if (!user1.getname().equals(user2.getname())) {
-//            System.out.println("test fail name");
-//        }
-//        else if (!user1.getpassword().equals(user2.getpassword())) {
-//            System.out.println("test fail password");
-//        }
-//        else {
-//            System.out.println("test search complete");
-//        }
-
-
-//        System.out.println("name : " + user2.getname());
-//        System.out.println("id : " + user2.getid());
-//        System.out.println("passwd : " + user2.getpassword());
     }
 //    @Test(expected = DuplicateKeyException.class)
     public void duplicatekey() {
@@ -119,7 +109,7 @@ public class UserDaoTest {
         }
     }
 //    @Test(expected = EmptyResultDataAccessException.class)
-    public void getUserFailure() throws SQLException {
+    public void getUserFailure(){
 
         dao.reset();
         assertThat(dao.getCount(), is(0));
@@ -127,7 +117,7 @@ public class UserDaoTest {
         dao.get("unkown_id");
     }
 //    @Test
-    public void getAll() throws SQLException{
+    public void getAll(){
         dao.reset();
 
         List<User> users0 = dao.getAll();
@@ -151,10 +141,13 @@ public class UserDaoTest {
         checkSameUser(user1, users3.get(1));
         checkSameUser(user3, users3.get(2));
     }
-
     private void checkSameUser(User user1, User user2) {
-        assertThat(user1.getid(), is(user2.getid()));
-        assertThat(user1.getname(), is(user2.getname()));
-        assertThat(user1.getpassword(), is(user2.getpassword()));
+        assertThat(user1.getId(), is(user2.getId()));
+        assertThat(user1.getName(), is(user2.getName()));
+        assertThat(user1.getPassword(), is(user2.getPassword()));
+        assertThat(user1.getLevel(), is(user2.getLevel()));
+        assertThat(user1.getLogin(), is(user2.getLogin()));
+        assertThat(user1.getRecommand(), is(user2.getRecommand()));
+
     }
 }

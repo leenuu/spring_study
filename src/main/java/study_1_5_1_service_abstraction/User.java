@@ -19,34 +19,34 @@ public class User {
        this.login = login;
        this.recommend = recommend;
     }
-    public String getid() {
+    public String getId() {
         return this.id;
     }
 
-    public void setid(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getname() {
+    public String getName() {
         return this.name;
     }
 
-    public void setname(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getpassword() {
+    public String getPassword() {
         return this.password;
     }
 
-    public void setpassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
     public void setLevel(Level level) {
         this.level = level;
     }
-    public int getLevel() {
-        return level.intValue();
+    public Level getLevel() {
+        return level;
     }
     public void setLogin(int login) {
         this.login = login;
