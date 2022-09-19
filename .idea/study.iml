@@ -18,6 +18,9 @@
         <fileset id="fileset5" name="Testcontext" removed="false">
           <file>file://$MODULE_DIR$/src/main/resources/testcontext.xml</file>
         </fileset>
+        <fileset id="fileset6" name="1_4_applicationContext" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/1_4_applicationContext.xml</file>
+        </fileset>
       </configuration>
     </facet>
   </component>
