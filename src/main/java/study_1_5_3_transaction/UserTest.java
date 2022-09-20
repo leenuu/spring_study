@@ -1,4 +1,4 @@
-package study_1_5_2_service_abstraction;
+package study_1_5_3_transaction;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/1_5_applicationContextPlus.xml")
+@ContextConfiguration(locations = "/1_5_applicationContext.xml")
 public class UserTest {
     User user;
 

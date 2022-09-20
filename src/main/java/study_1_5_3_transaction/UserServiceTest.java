@@ -1,4 +1,4 @@
-package study_1_5_2_service_abstraction;
+package study_1_5_3_transaction;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,24 +13,22 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static study_1_5_2_service_abstraction.UserService.MIN_LOGCOUNT_FOR_SILVER;
-import static study_1_5_2_service_abstraction.UserService.MIN_RECOMMEND_FOR_GOLD;
+import static org.junit.Assert.fail;
 import static study_1_5_2_service_abstraction.EventUserService.EVENT_MIN_LOGCOUNT_FOR_SILVER;
 import static study_1_5_2_service_abstraction.EventUserService.EVENT_MIN_RECOMMEND_FOR_GOLD;
+import static study_1_5_2_service_abstraction.UserService.MIN_LOGCOUNT_FOR_SILVER;
+import static study_1_5_2_service_abstraction.UserService.MIN_RECOMMEND_FOR_GOLD;
 
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/1_5_applicationContextPlus.xml")
+@ContextConfiguration(locations = "/1_5_applicationContext.xml")
 public class UserServiceTest {
     @Autowired
     UserService userService;
     @Autowired
-    EventUserService eventUserServicel;
-    @Autowired
     UserDao userDao;
     List<User> users;
-    List<User> eventUsers;
 
     @Before
     public void setUp() {
@@ -41,34 +39,28 @@ public class UserServiceTest {
             new User("moon", "ans", "tlsgur", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD),
             new User("pgn", "hong", "found", Level.GOLD, 100, Integer.MAX_VALUE)
         );
-
-        eventUsers = Arrays.asList (
-                new User("leenuu", "kang", "not", Level.BASIC, EVENT_MIN_LOGCOUNT_FOR_SILVER-1, 0),
-                new User("donas", "kim", "404", Level.BASIC, EVENT_MIN_LOGCOUNT_FOR_SILVER, 10),
-                new User("ksj", "kim", "eunjin", Level.SILVER, 60, EVENT_MIN_RECOMMEND_FOR_GOLD-1),
-                new User("moon", "ans", "tlsgur", Level.SILVER, 60, EVENT_MIN_RECOMMEND_FOR_GOLD),
-                new User("pgn", "hong", "found", Level.GOLD, 100, Integer.MAX_VALUE)
-        );
     }
 
+    @Test
+    public void upgradeAllOrNothing() {
+        UserService testUserService = new TestUserService(users.get(3).getId());
+        testUserService.setUserDao(this.userDao);
+
+        userDao.reset();
+        for(User user : users) userDao.add(user);
+
+        try {
+            testUserService.upgradeLevels();
+            fail("TestUserServiceException expected");
+        }
+        catch (TestUserServiceException e) {
+        }
+
+        cheackLevel(users.get(1), false);
+    }
 //    @Test
     public void bean() {
         assertThat(this.userService, is(notNullValue()));
-    }
-    @Test
-    public void eventUpgradeLevels() {
-        userDao.reset();
-        for(User user : eventUsers) userDao.add(user);
-
-        eventUserServicel.upgradeLevels();
-
-//        System.out.println(eventUsers.get(0));
-
-        cheackLevel(eventUsers.get(0), false);
-        cheackLevel(eventUsers.get(1), true);
-        cheackLevel(eventUsers.get(2), false);
-        cheackLevel(eventUsers.get(3), true);
-        cheackLevel(eventUsers.get(4), false);
     }
 //    @Test
     public void upgradeLevels() {
@@ -110,6 +102,21 @@ public class UserServiceTest {
         else {
             assertThat(userUpdate.getLevel(), is(user.getLevel()));
         }
+    }
+    static class TestUserService extends UserService {
+        private String id;
+
+        private TestUserService(String id) {
+            this.id = id;
+        }
+
+        protected void upgradeLevel(User user) {
+            if (user.getId().equals(this.id)) throw new TestUserServiceException();
+            super.upgradeLevel(user);
+        }
+    }
+    static class TestUserServiceException extends RuntimeException {
+
     }
 
 }

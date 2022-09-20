@@ -24,6 +24,9 @@
         <fileset id="fileset7" name="1_5_applicationContext" removed="false">
           <file>file://$MODULE_DIR$/src/main/resources/1_5_applicationContext.xml</file>
         </fileset>
+        <fileset id="fileset8" name="1_5_applicationContextPlus" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/1_5_applicationContextPlus.xml</file>
+        </fileset>
       </configuration>
     </facet>
   </component>
