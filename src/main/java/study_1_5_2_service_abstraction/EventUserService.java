@@ -2,10 +2,10 @@ package study_1_5_2_service_abstraction;
 
 import java.util.List;
 
-public class UserService implements UserLevelUpgradePolicy{
+public class EventUserService implements UserLevelUpgradePolicy{
     UserDao userDao;
-    public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
-    public static final int MIN_RECOMMEND_FOR_GOLD = 30;
+    public static final int EVENT_MIN_LOGCOUNT_FOR_SILVER = 25;
+    public static final int EVENT_MIN_RECOMMEND_FOR_GOLD = 30;
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
@@ -25,8 +25,8 @@ public class UserService implements UserLevelUpgradePolicy{
     public boolean canUpgradeLevel(User user) {
         Level currentLevel = user.getLevel();
         switch (currentLevel) {
-            case BASIC: return (user.getLogin() >= MIN_LOGCOUNT_FOR_SILVER);
-            case SILVER: return (user.getRecommand() >= MIN_RECOMMEND_FOR_GOLD);
+            case BASIC: return (user.getLogin() >= EVENT_MIN_LOGCOUNT_FOR_SILVER);
+            case SILVER: return (user.getRecommand() >= EVENT_MIN_RECOMMEND_FOR_GOLD);
             case GOLD: return false;
             default: throw new IllegalArgumentException("Unknown Level: " + currentLevel);
         }
@@ -36,4 +36,3 @@ public class UserService implements UserLevelUpgradePolicy{
         userDao.update(user);
     }
 }
-
