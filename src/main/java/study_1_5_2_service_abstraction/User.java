@@ -63,7 +63,7 @@ public class User {
     public void upgradeLevel() {
         Level nextLevel = this.level.nextLevel();
         if (nextLevel == null) {
-            throw new IllegalArgumentException(this.level + "can not upgrade");
+            throw new IllegalStateException(this.level + "can not upgrade");
         }
         else {
             this.level = nextLevel;

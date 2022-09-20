@@ -13,6 +13,9 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static study_1_5_2_service_abstraction.UserService.MIN_LOGCOUNT_FOR_SILVER;
+import static study_1_5_2_service_abstraction.UserService.MIN_RECOMMEND_FOR_GOLD;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/1_5_applicationContext.xml")
@@ -26,11 +29,11 @@ public class UserServiceTest {
     @Before
     public void setUp() {
         users = Arrays.asList (
-            new User("leenuu", "kang", "not", Level.BASIC, 49, 0),
-            new User("donas", "kim", "404", Level.BASIC, 50, 10),
-            new User("ksj", "kim", "eunjin", Level.SILVER, 60, 29),
-            new User("moon", "ans", "tlsgur", Level.SILVER, 60, 30),
-            new User("pgn", "hong", "found", Level.GOLD, 100, 100)
+            new User("leenuu", "kang", "not", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0),
+            new User("donas", "kim", "404", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 10),
+            new User("ksj", "kim", "eunjin", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD-1),
+            new User("moon", "ans", "tlsgur", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD),
+            new User("pgn", "hong", "found", Level.GOLD, 100, Integer.MAX_VALUE)
         );
     }
 
@@ -38,22 +41,22 @@ public class UserServiceTest {
     public void bean() {
         assertThat(this.userService, is(notNullValue()));
     }
-//    @Test
+    @Test
     public void upgradeLevels() {
         userDao.reset();
         for(User user : users) userDao.add(user);
 
         userService.upgradeLevels();
 
-        cheackLevel(users.get(0), Level.BASIC);
-        cheackLevel(users.get(1), Level.SILVER);
-        cheackLevel(users.get(2), Level.SILVER);
-        cheackLevel(users.get(3), Level.GOLD);
-        cheackLevel(users.get(4), Level.GOLD);
+        cheackLevel(users.get(0), false);
+        cheackLevel(users.get(1), true);
+        cheackLevel(users.get(2), false);
+        cheackLevel(users.get(3), true);
+        cheackLevel(users.get(4), false);
 
 
     }
-    @Test
+//    @Test
     public void add() {
         userDao.reset();
 
@@ -70,9 +73,14 @@ public class UserServiceTest {
         assertThat(userWithLevelRead.getLevel(), is(userWithLevel.getLevel()));
         assertThat(userWithoutLevelRead.getLevel(), is(userWithoutlevel.getLevel()));
     }
-    private void cheackLevel(User user, Level expectedLevel) {
+    private void cheackLevel(User user, boolean upgraded) {
         User userUpdate = userDao.get(user.getId());
-        assertThat(userUpdate.getLevel(), is(expectedLevel));
+        if (upgraded) {
+            assertThat(userUpdate.getLevel(), is(user.getLevel().nextLevel()));
+        }
+        else {
+            assertThat(userUpdate.getLevel(), is(user.getLevel()));
+        }
     }
 
 }
