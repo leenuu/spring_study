@@ -1,5 +1,6 @@
 package study_1_5_3_transaction;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface UserDao {
