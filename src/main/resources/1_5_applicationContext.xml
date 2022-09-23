@@ -8,9 +8,10 @@
         <property name="username" value="root" />
         <property name="password" value="Kangjoon12!" />
     </bean>
-    <bean name="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="mail.server.com"/>
-    </bean>
+<!--    <bean name="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">-->
+<!--        <property name="host" value="mail.server.com"/>-->
+<!--    </bean>-->
+    <bean name="mailSender" class="study_1_5_5_java_mail.DummyMailSender"/>
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>

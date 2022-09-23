@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,6 +29,8 @@ public class UserServiceTest {
     UserDao userDao;
     @Autowired
     PlatformTransactionManager transactionManager;
+    @Autowired
+    MailSender mailSender;
     List<User> users;
 
     @Before
@@ -41,11 +44,12 @@ public class UserServiceTest {
         );
     }
 
-//    @Test
+    @Test
     public void upgradeAllOrNothing() {
         UserService testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(this.userDao);
         testUserService.setTransactionManager(this.transactionManager);
+        testUserService.setMailSender(mailSender);
 
         userDao.reset();
         for(User user : users) userDao.add(user);
@@ -63,7 +67,7 @@ public class UserServiceTest {
     public void bean() {
         assertThat(this.userService, is(notNullValue()));
     }
-    @Test
+//    @Test
     public void upgradeLevels() throws Exception {
         userDao.reset();
         for(User user : users) userDao.add(user);
