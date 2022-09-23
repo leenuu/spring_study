@@ -8,15 +8,19 @@
         <property name="username" value="root" />
         <property name="password" value="Kangjoon12!" />
     </bean>
+    <bean name="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="mail.server.com"/>
+    </bean>
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-    <bean id="userDao" class="study_1_5_4_transaction_abstraction.UserDaoJdbc">
+    <bean id="userDao" class="study_1_5_5_java_mail.UserDaoJdbc">
         <property name="dataSource" ref="dataSource" />
     </bean>
-    <bean id="userService" class="study_1_5_4_transaction_abstraction.UserService">
+    <bean id="userService" class="study_1_5_5_java_mail.UserService">
         <property name="userDao" ref="userDao"/>
 <!--        <property name="dataSource" ref="dataSource"/>-->
         <property name="transactionManager" ref="transactionManager"/>
+        <property name="mailSender" ref="mailSender"/>
     </bean>
 </beans>
