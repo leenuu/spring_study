@@ -1,4 +1,4 @@
-package study_1_5_5_java_mail;
+package study_1_6_1_AOP;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import static study_1_5_2_service_abstraction.UserService.MIN_RECOMMEND_FOR_GOLD
 @ContextConfiguration(locations = "/1_6_applicationContext.xml")
 public class UserServiceTest {
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
     @Autowired
     UserDao userDao;
     @Autowired
@@ -45,18 +45,21 @@ public class UserServiceTest {
         );
     }
 
-//    @Test
+    @Test
     public void upgradeAllOrNothing() {
-        UserService testUserService = new TestUserService(users.get(3).getId());
+        UserServiceImpl testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(this.userDao);
-        testUserService.setTransactionManager(this.transactionManager);
         testUserService.setMailSender(mailSender);
+
+        UserServiceTx userServiceTx = new UserServiceTx();
+        userServiceTx.setTransactionManager(this.transactionManager);
+        userServiceTx.setUserService(testUserService);
 
         userDao.reset();
         for(User user : users) userDao.add(user);
 
         try {
-            testUserService.upgradeLevels();
+            userServiceTx.upgradeLevels();
 //            fail("TestUserServiceException expected");
         }
         catch (TestUserServiceException e) {
@@ -68,8 +71,8 @@ public class UserServiceTest {
     public void bean() {
         assertThat(this.userService, is(notNullValue()));
     }
-    @Test
-    @DirtiesContext
+//    @Test
+//    @DirtiesContext
     public void upgradeLevels() throws Exception {
         userDao.reset();
         for(User user : users) userDao.add(user);
@@ -116,7 +119,7 @@ public class UserServiceTest {
             assertThat(userUpdate.getLevel(), is(user.getLevel()));
         }
     }
-    static class TestUserService extends UserService {
+    static class TestUserService extends UserServiceImpl {
         private String id;
 
         private TestUserService(String id) {
