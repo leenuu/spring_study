@@ -30,19 +30,6 @@ public class UserServiceImpl implements UserService{
             }
         }
     }
-//    public void upgradeLevels() {
-//
-//        TransactionStatus status = this.transactionManager.getTransaction(new DefaultTransactionDefinition());
-//
-//        try {
-//            upgradeLevelsInternal();
-//            transactionManager.commit(status);
-//        }
-//        catch (RuntimeException e) {
-//            transactionManager.rollback(status);
-//        }
-//
-//    }
     public void add(User user) {
         if (user.getLevel() == null) user.setLevel(Level.BASIC);
         userDao.add(user);

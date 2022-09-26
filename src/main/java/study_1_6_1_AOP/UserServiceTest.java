@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class UserServiceTest {
         );
     }
 
-    @Test
+//    @Test
     public void upgradeAllOrNothing() {
         UserServiceImpl testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(this.userDao);
@@ -71,22 +72,23 @@ public class UserServiceTest {
     public void bean() {
         assertThat(this.userService, is(notNullValue()));
     }
-//    @Test
+    @Test
 //    @DirtiesContext
     public void upgradeLevels() throws Exception {
-        userDao.reset();
-        for(User user : users) userDao.add(user);
+        UserServiceImpl userServiceImpl = new UserServiceImpl();
+
+        MockUserDao mockUserDao = new MockUserDao(this.users);
+        userServiceImpl.setUserDao(mockUserDao);
 
         MockMailSender mockMailSender = new MockMailSender();
-        userService.setMailSender(mockMailSender);
+        userServiceImpl.setMailSender(mockMailSender);
 
-        userService.upgradeLevels();
+        userServiceImpl.upgradeLevels();
 
-        cheackLevel(users.get(0), false);
-        cheackLevel(users.get(1), true);
-        cheackLevel(users.get(2), false);
-        cheackLevel(users.get(3), true);
-        cheackLevel(users.get(4), false);
+        List<User> updated = mockUserDao.getUpdated();
+        assertThat(updated.size(), is(2));
+        cheackUserAndLevel(updated.get(0), "donas", Level.SILVER);
+        cheackUserAndLevel(updated.get(1), "moon", Level.GOLD);
 
         List<String> requests = mockMailSender.getRequests();
         assertThat(requests.size(), is(2));
@@ -110,6 +112,10 @@ public class UserServiceTest {
         assertThat(userWithLevelRead.getLevel(), is(userWithLevel.getLevel()));
         assertThat(userWithoutLevelRead.getLevel(), is(userWithoutlevel.getLevel()));
     }
+    private void cheackUserAndLevel(User updated, String expectedId, Level expectedLevel) {
+        assertThat(updated.getId(), is(expectedId));
+        assertThat(updated.getLevel(), is(expectedLevel));
+    }
     private void cheackLevel(User user, boolean upgraded) {
         User userUpdate = userDao.get(user.getId());
         if (upgraded) {
@@ -132,7 +138,35 @@ public class UserServiceTest {
         }
     }
     static class TestUserServiceException extends RuntimeException {
+    }
+    static class MockUserDao implements UserDao {
+        private List<User> users;
+        private List<User> updated = new ArrayList();
 
+        private MockUserDao(List<User> users) {
+            this.users = users;
+        }
+        public List<User> getUpdated() {
+            return this.updated;
+        }
+        public List<User> getAll() {
+            return this.users;
+        }
+        public void update(User user) {
+            this.updated.add(user);
+        }
+        public void add(User user) {
+            throw new UnsupportedOperationException();
+        }
+        public void reset() {
+            throw new UnsupportedOperationException();
+        }
+        public User get(String id) {
+            throw new UnsupportedOperationException();
+        }
+        public int getCount() {
+            throw new UnsupportedOperationException();
+        }
     }
 
 }
